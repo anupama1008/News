@@ -4,7 +4,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        Hi I am Alisa Khadka.
+        Hi I am Alisa Khadka;
       </div>
     )
   }
