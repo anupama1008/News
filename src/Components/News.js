@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Newsitem from '../Newsitem'
+import Newsitem from './Newsitem'
 import Spinner from './Spinner';
 export class News extends Component {
   articles=[
@@ -139,46 +139,45 @@ constructor(){
   this.state={
     articles:[],
     loading:false,
-    page:1,
-    totalArticle:0
+    page:1
   };
 }
-async componentDidMount(){
-  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=6fc3be3ece9a496a994d7ae887010031&page=1&pageSize=${this.props.items}`;
+async updatenews(page){
+let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=6fc3be3ece9a496a994d7ae887010031&page=${page}&pageSize=${this.props.items}`;
   this.setState({loading:true})
   let data= await fetch(url);
+  document.title=`${this.props.category}-News App`;
   let parsedData=await data.json();
-  this.setState({articles:parsedData.articles,totalArticle:parsedData.totalResults,loading:false})
-}
-nextPage= async()=>{
-  if(this.state.page+1<=Math.ceil(this.state.totalArticle/this.props.items)){
-  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=6fc3be3ece9a496a994d7ae887010031&page=${this.state.page+1}&pageSize=${this.props.items}`;
-  this.setState({loading:true})
-  let data= await fetch(url);
-  let parsedData=await data.json();
-  //this.setState({loading:true})
     this.setState({
-        page:this.state.page+1,
+        page:page,
         articles:parsedData.articles,
-        loading:false
+        loading:false,
+        totalArticle:parsedData.totalResults
     })
 }
+async componentDidMount(){
+    this.updatenews(this.state.page);
 }
-previousPage=async()=>{
-  let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=6fc3be3ece9a496a994d7ae887010031&page=${this.state.page-1}&pageSize=${this.props.items}`;
-  this.setState({loading:true})
-  let data= await fetch(url);
-  let parsedData=await data.json();
-  //this.setState({loading:false})
-   this.setState({
-        page:this.state.page-1,
-        articles:parsedData.articles,
-        loading:false
-    })}
+nextPage = async () => {
+    const nextPage = this.state.page + 1;
+    if (nextPage <= Math.ceil(this.state.totalArticle / this.props.items)) {
+      await this.setState({ page: nextPage });
+      this.updatenews(nextPage);
+    }
+  }
+  
+  previousPage = async () => {
+    const prevPage = this.state.page - 1;
+    if (prevPage >= 1) {
+      await this.setState({ page: prevPage });
+      this.updatenews(prevPage);
+    }
+  }
+  
   render() {
     return (
       <div className='row px-5 py-6'>
-      <h2 className='text-center py-3'>Hello news- I am here to present myself.</h2>
+      <h2 className='text-center py-3'>Hello - {this.props.category} News.</h2>
        {this.state.loading && <Spinner/>}
               {!this.state.loading && this.state.articles.map((element) => {
               const title = element.title ? element.title.slice(0, 45) : "";

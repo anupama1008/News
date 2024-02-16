@@ -4,7 +4,7 @@ export class Newsitem extends Component {
   render() {
   let {title, description,newsurl,image}=this.props;
     return (
-        <div className="container card" style={{width:'18rem',margin:'5rem', padding:'1rem'}}>
+        <div className="container card">
           <img src={image?image:"https://img.freepik.com/free-photo/3d-rendering-illustration-letter-blocks-forming-word-news-white-background_181624-60840.jpg"} className="card-img-top" alt="..."/>
           <div className="card-body">
               <h5 className="card-title">{title}...</h5>
