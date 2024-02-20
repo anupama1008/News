@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default class App extends Component {
   render() {
-    const pagesize=10;
+    const pagesize=20;
     return (
       <>
         <div className='py-4'>
